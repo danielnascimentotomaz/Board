@@ -27,6 +27,7 @@ public class MySQLConnection implements ConnectionStrategy {
         config.setUsername(user);
         config.setPassword(pass);
         config.setMaximumPoolSize(10);
+        config.setAutoCommit(false);
 
         dataSource = new HikariDataSource(config);
     }
