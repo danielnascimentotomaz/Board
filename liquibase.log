@@ -1,67 +1,39 @@
-ago. 12, 2025 10:31:02 AM liquibase.changelog
+ago. 18, 2025 8:17:19 AM liquibase.changelog
 INFO: Reading resource: db/changelog/migrations/db.changelog-202508111045.sql
-ago. 12, 2025 10:31:02 AM liquibase.changelog
+ago. 18, 2025 8:17:19 AM liquibase.changelog
 INFO: Reading resource: db/changelog/migrations/db.changelog-202508120540.sql
-ago. 12, 2025 10:31:02 AM liquibase.changelog
+ago. 18, 2025 8:17:19 AM liquibase.changelog
 INFO: Reading resource: db/changelog/migrations/db.changelog-202508120617.sql
-ago. 12, 2025 10:31:02 AM liquibase.changelog
+ago. 18, 2025 8:17:19 AM liquibase.changelog
 INFO: Reading resource: db/changelog/migrations/db.changelog-202508120625.sql
-ago. 12, 2025 10:31:02 AM liquibase.changelog
-INFO: Creating database history table with name: railway.DATABASECHANGELOG
-ago. 12, 2025 10:31:03 AM liquibase.changelog
+ago. 18, 2025 8:17:21 AM liquibase.changelog
 INFO: Reading from railway.DATABASECHANGELOG
-ago. 12, 2025 10:31:05 AM liquibase.lockservice
-INFO: Successfully acquired change log lock
-ago. 12, 2025 10:31:05 AM liquibase.command
-INFO: Using deploymentId: 5005465684
-ago. 12, 2025 10:31:05 AM liquibase.changelog
+Database is up to date, no changesets to execute
+ago. 18, 2025 8:17:22 AM liquibase.changelog
 INFO: Reading from railway.DATABASECHANGELOG
-Running Changeset: db/changelog/migrations/db.changelog-202508111045.sql::1::daniel
-ago. 12, 2025 10:31:06 AM liquibase.changelog
-INFO: Custom SQL executed
-ago. 12, 2025 10:31:06 AM liquibase.changelog
-INFO: ChangeSet db/changelog/migrations/db.changelog-202508111045.sql::1::daniel ran successfully in 638ms
-Running Changeset: db/changelog/migrations/db.changelog-202508120540.sql::202508120540::daniel
-ago. 12, 2025 10:31:07 AM liquibase.changelog
-INFO: Custom SQL executed
-ago. 12, 2025 10:31:08 AM liquibase.changelog
-INFO: ChangeSet db/changelog/migrations/db.changelog-202508120540.sql::202508120540::daniel ran successfully in 934ms
-Running Changeset: db/changelog/migrations/db.changelog-202508120617.sql::202508120617::daniel
-ago. 12, 2025 10:31:09 AM liquibase.changelog
-INFO: Custom SQL executed
-ago. 12, 2025 10:31:09 AM liquibase.changelog
-INFO: ChangeSet db/changelog/migrations/db.changelog-202508120617.sql::202508120617::daniel ran successfully in 668ms
-Running Changeset: db/changelog/migrations/db.changelog-202508120625.sql::202508120625::daniel
-ago. 12, 2025 10:31:10 AM liquibase.changelog
-INFO: Custom SQL executed
-ago. 12, 2025 10:31:10 AM liquibase.changelog
-INFO: ChangeSet db/changelog/migrations/db.changelog-202508120625.sql::202508120625::daniel ran successfully in 776ms
 
 UPDATE SUMMARY
-Run:                          4
-Previously run:               0
+Run:                          0
+Previously run:               4
 Filtered out:                 0
 -------------------------------
 Total change sets:            4
 
-ago. 12, 2025 10:31:11 AM liquibase.util
+ago. 18, 2025 8:17:22 AM liquibase.util
 INFO: UPDATE SUMMARY
-ago. 12, 2025 10:31:11 AM liquibase.util
-INFO: Run:                          4
-ago. 12, 2025 10:31:11 AM liquibase.util
-INFO: Previously run:               0
-ago. 12, 2025 10:31:11 AM liquibase.util
+ago. 18, 2025 8:17:22 AM liquibase.util
+INFO: Run:                          0
+ago. 18, 2025 8:17:22 AM liquibase.util
+INFO: Previously run:               4
+ago. 18, 2025 8:17:22 AM liquibase.util
 INFO: Filtered out:                 0
-ago. 12, 2025 10:31:11 AM liquibase.util
+ago. 18, 2025 8:17:22 AM liquibase.util
 INFO: -------------------------------
-ago. 12, 2025 10:31:11 AM liquibase.util
+ago. 18, 2025 8:17:22 AM liquibase.util
 INFO: Total change sets:            4
-ago. 12, 2025 10:31:11 AM liquibase.util
+ago. 18, 2025 8:17:22 AM liquibase.util
 INFO: Update summary generated
-ago. 12, 2025 10:31:11 AM liquibase.command
-INFO: Update command completed successfully.
-Liquibase: Update has been successful. Rows affected: 4
-ago. 12, 2025 10:31:11 AM liquibase.lockservice
+ago. 18, 2025 8:17:22 AM liquibase.lockservice
 INFO: Successfully released change log lock
-ago. 12, 2025 10:31:11 AM liquibase.command
+ago. 18, 2025 8:17:23 AM liquibase.command
 INFO: Command execution complete

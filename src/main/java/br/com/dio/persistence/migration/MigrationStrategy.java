@@ -65,6 +65,10 @@ public class MigrationStrategy {
         } catch (IOException e) {
             // Se não conseguir abrir o arquivo para log, lança runtime exception
             throw new RuntimeException(e);
+        }finally {
+            // 🔥 restaura os streams originais
+            System.setOut(originalOut);
+            System.setErr(originalErr);
         }
     }
 }
