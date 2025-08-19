@@ -21,7 +21,9 @@ public class BoardQueryService {
 
 
     public Optional<BoardEntity> findById(final Long id)throws SQLException{
-        try(Connection connection = connectionStrategy.getConnection()) {
+
+        Connection connection = connectionStrategy.getConnection();
+        try {
             BoardDAO boardDAO = new BoardDAOImpl(connection);
             BoardColumnDAO boardColumnDAO = new BoardColumnDAOImpl(connection);
 
@@ -40,7 +42,8 @@ public class BoardQueryService {
                 }
             });
             return boardEntity;
-        }
+        }finally {
+            connection.close(); // devolve a conexão para o pool
 
     }
-}
+}}

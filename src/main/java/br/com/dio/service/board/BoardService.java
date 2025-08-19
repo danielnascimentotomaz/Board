@@ -30,18 +30,25 @@ public class BoardService {
             BoardColumnDAO boardColumnDAO = new BoardColumnDAOImpl(connection);
 
             try {
-
+                // Primeiro salva o BoardEntity para gerar o ID
                 boardDAO.insert(entity);
-                List<BoardColumnEntity> columnEntities = entity.getBoardColumns().
-                        stream().map(c -> {
-                            c.setBoard(entity);
-                            return c;
-                        }).toList();
 
-                for (var column : columnEntities){
 
+                // Pega a lista de colunas do board e cria um stream para processá-las
+                List<BoardColumnEntity> columnEntities = entity.getBoardColumns()
+                        .stream()
+                        // Para cada coluna, define a referência do board e retorna a coluna
+                        .map(c -> {
+                            c.setBoard(entity); // Associa a coluna ao board atual-> Seta o Id Board
+                            return c;           // Retorna a coluna modificada
+                        })
+                        // Converte o stream de volta para uma lista
+                        .toList();
+
+                // Percorre cada coluna da lista columnEntities
+                for (var column : columnEntities) {
+                    // Insere a coluna no banco de dados usando o DAO
                     boardColumnDAO.insert(column);
-
                 }
 
         connection.commit();

@@ -27,7 +27,6 @@ public class MySQLConnection implements ConnectionStrategy {
         config.setUsername(user);
         config.setPassword(pass);
         config.setMaximumPoolSize(10);
-        config.setAutoCommit(false);
 
         dataSource = new HikariDataSource(config);
     }
@@ -50,11 +49,10 @@ public class MySQLConnection implements ConnectionStrategy {
     }
 
     @Override
-    public void close() throws SQLException {
+    public void close() {
         if (dataSource != null && !dataSource.isClosed()) {
             dataSource.close();
+        }
     }
 
-
-}
 }

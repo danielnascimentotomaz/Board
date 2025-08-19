@@ -26,13 +26,16 @@ public class BoardDAOImpl implements BoardDAO {
     public BoardEntity insert(BoardEntity entity) throws SQLException {
         String sql = "INSERT INTO BOARDS(name) VALUES (?)";
 
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (PreparedStatement ps = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, entity.getName());
             ps.executeUpdate();
 
-            if (ps instanceof StatementImpl impl) {
-                entity.setId(impl.getLastInsertID());
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    entity.setId(rs.getLong(1)); // ID gerado pelo banco
+                }
             }
             return entity;
         }

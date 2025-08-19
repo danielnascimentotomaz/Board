@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class BoardColumnDAOImpl implements BoardColumnDAO {
     public BoardColumnEntity insert(BoardColumnEntity entity) throws SQLException {
         String sql = "INSERT INTO BOARDS_COLUMNS(name, `order`, kind, boards_id) VALUES (?,?,?,?)";
 
-        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+        try(PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, entity.getName());
             ps.setInt(2, entity.getOrder());
