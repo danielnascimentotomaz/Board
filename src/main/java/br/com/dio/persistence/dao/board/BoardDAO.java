@@ -21,4 +21,6 @@ public interface BoardDAO {
     List<BoardEntity> findAll()throws  SQLException;
 
 
+
+
 }

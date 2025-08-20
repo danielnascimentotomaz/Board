@@ -1,5 +1,7 @@
 package br.com.dio.service.board;
 
+import br.com.dio.dto.BoardColumnDTO;
+import br.com.dio.dto.BoardDetailsDTO;
 import br.com.dio.entity.BoardColumnEntity;
 import br.com.dio.entity.BoardEntity;
 import br.com.dio.persistence.config.ConnectionStrategy;
@@ -22,8 +24,11 @@ public class BoardQueryService {
 
     public Optional<BoardEntity> findById(final Long id)throws SQLException{
 
-        Connection connection = connectionStrategy.getConnection();
-        try {
+
+        try (
+                Connection connection = connectionStrategy.getConnection();
+
+                ){
             BoardDAO boardDAO = new BoardDAOImpl(connection);
             BoardColumnDAO boardColumnDAO = new BoardColumnDAOImpl(connection);
 
@@ -42,8 +47,43 @@ public class BoardQueryService {
                 }
             });
             return boardEntity;
-        }finally {
-            connection.close(); // devolve a conexão para o pool
+        }
+    }
+
+    public Optional<BoardDetailsDTO> showBoardDetails(final Long id){
+
+        try(
+                Connection connection = connectionStrategy.getConnection();
+                ) {
+
+            BoardDAO boardDAO = new BoardDAOImpl(connection);
+            BoardColumnDAO boardColumnDAO = new BoardColumnDAOImpl(connection);
+
+            Optional<BoardEntity> optional = boardDAO.findById(id);
+
+            if (optional.isPresent()){
+                BoardEntity boardEntity = optional.get();
+                List<BoardColumnDTO> boardColumnDTOS = boardColumnDAO.findByBoardIdWithDetails(boardEntity.getId());
+                BoardDetailsDTO boardDetailDTO = new BoardDetailsDTO( boardEntity.getId(),
+                                                                    boardEntity.getName(),
+                                                                    boardColumnDTOS);
+
+                return Optional.of(boardDetailDTO); // ✅ dentro do if
+
+            }
+
+            return Optional.empty(); // ✅ se não encontrar
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar colunas do Board", e);
+        }
+
 
     }
-}}
+
+
+
+
+
+
+}

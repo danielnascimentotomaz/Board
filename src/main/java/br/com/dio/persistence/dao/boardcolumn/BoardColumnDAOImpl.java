@@ -1,5 +1,6 @@
 package br.com.dio.persistence.dao.boardcolumn;
 
+import br.com.dio.dto.BoardColumnDTO;
 import br.com.dio.entity.BoardColumnEntity;
 import br.com.dio.entity.BoardColumnKindEnum;
 import java.sql.Connection;
@@ -72,5 +73,61 @@ public class BoardColumnDAOImpl implements BoardColumnDAO {
         return boardColumnEntityList;
     }
 
+    @Override
+    public List<BoardColumnDTO> findByBoardIdWithDetails(Long  boardId) throws SQLException {
+        List<BoardColumnDTO> dtos = new ArrayList<>();
+        String sql ="""
+                    SELECT bc.id,
+                           bc.name,
+                           bc.kind,
+                           (
+                             SELECT COUNT(*)
+                             FROM CARDS c
+                             WHERE c.boards_columns_id = bc.id
+                           ) AS Cards_amount
+                    FROM BOARDS_COLUMNS bc
+                    WHERE bc.boards_id = ?
+                    ORDER BY bc.`order`
+                    """;
+        /* String sql_1 = """
+                SELECT bc.id,
+                       bc.name,
+                       bc.kind,
+                       COUNT(c.id) AS Cards_amount
+                FROM BOARDS_COLUMNS bc
+                LEFT JOIN CARDS c
+                       ON c.boards_columns_id = bc.id
+                WHERE bc.boards_id = ?
+                GROUP BY bc.id, bc.name, bc.kind
+                ORDER BY bc.`order`;
+                """;
+        */
 
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, boardId);
+
+            try (ResultSet resultSet = ps.executeQuery()) {
+                while (resultSet.next()) {
+
+                    BoardColumnDTO dto = new BoardColumnDTO(
+                            resultSet.getLong("bc.id"),
+                            resultSet.getString("bc.name"),
+                            findByName(resultSet.getString("bc.kind")),
+                            resultSet.getInt("Cards_amount")
+                    );
+
+                    dtos.add(dto);
+                }
+
+
+            }
+        }
+        return dtos;
+
+
+    }
 }
+
+
+

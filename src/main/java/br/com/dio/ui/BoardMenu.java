@@ -1,15 +1,27 @@
 package br.com.dio.ui;
 
+import br.com.dio.entity.BoardColumnEntity;
 import br.com.dio.entity.BoardEntity;
+import br.com.dio.entity.CardEntity;
+import br.com.dio.persistence.config.ConnectionStrategy;
+import br.com.dio.service.board.BoardQueryService;
+import br.com.dio.service.card.CardService;
+import br.com.dio.service.card.CardServiceImpl;
 
 
+import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class BoardMenu {
     Scanner scanner = new Scanner(System.in);
     private final BoardEntity boardEntity;
-    public BoardMenu(BoardEntity boardEntity) {
+    private final ConnectionStrategy connectionStrategy;
+
+
+    public BoardMenu(BoardEntity boardEntity, ConnectionStrategy connectionStrategy) {
         this.boardEntity = boardEntity;
+        this.connectionStrategy = connectionStrategy;
     }
 
 
@@ -68,6 +80,41 @@ public class BoardMenu {
     }
 
     private void createCard() {
+        CardEntity card =new CardEntity();
+        System.out.println("Informe o tilte do Card");
+        String title = scanner.nextLine();
+        card.setTitle(title);
+
+        System.out.println("Informe a descricao do Card");
+        String description = scanner.nextLine();
+        card.setDescription(description);
+
+        System.out.println("Informe Id BoardColumns");
+        Long IdBoardColumns = scanner.nextLong();
+        scanner.nextLine();
+
+        // 1. Verifica se a coluna existe dentro do board carregado
+        BoardColumnEntity coluna = boardEntity.getBoardColumns()
+                .stream()
+                .filter(c -> c.getId().equals(IdBoardColumns))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Coluna não encontrada no board."));
+
+
+        // Atribuir a coluna já existente
+        card.setBoardColumn(coluna);
+
+
+        try {
+            CardService cardService = new CardServiceImpl(connectionStrategy);
+            cardService.insert(card);
+            System.out.println(card);
+        } catch (SQLException e) {
+            System.out.println("Erro ao criar o card" + e.getMessage());
+            e.printStackTrace();
+        }
+
+
     }
 
     private void moveCardToNextColumn() {
@@ -83,6 +130,25 @@ public class BoardMenu {
     }
 
     private void showBoard() {
+        try {
+            BoardQueryService boardQueryService = new BoardQueryService(connectionStrategy);
+
+            var optional = boardQueryService.showBoardDetails(boardEntity.getId());
+
+            optional.ifPresent(b -> {
+                System.out.printf("Board [%s,%s]\n", b.id(), b.name());
+                b.columnDTOS().forEach(c -> {
+
+                    System.out.printf("Coluna [%s] tipo [%s] tem %s cards\n", c.name(), c.kind(), c.cardsAmount());
+
+                });
+
+            });
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     private void showColumn() {

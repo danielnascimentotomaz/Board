@@ -142,7 +142,7 @@ public class MainMenu  {
             Optional<BoardEntity> optional = boardQueryService.findById(id);
 
             optional.ifPresentOrElse(
-                  b  -> new BoardMenu(b).execute(),
+                  b  -> new BoardMenu(b,connectionStrategy).execute(),
                     () -> System.out.printf("Nao foi encontrado um board com id %s\n", id)
 
             );
