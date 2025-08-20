@@ -1,6 +1,7 @@
 package br.com.dio.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.ArrayList;
@@ -15,5 +16,6 @@ public class CardEntity {
     //Mapeamento
     private BoardColumnEntity boardColumn = new BoardColumnEntity();
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<BlockEntity> blockEntities = new ArrayList<>();
 }
