@@ -12,5 +12,8 @@ public class BlockEntity {
     private OffsetDateTime unblockedAt;
     private String unblockReason;
 
+    // Mapeamento
+    private CardEntity cardEntity = new CardEntity();
+
 
 }

@@ -1,9 +1,11 @@
 package br.com.dio.entity;
 
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Data
 public class BoardColumnEntity {
@@ -11,7 +13,9 @@ public class BoardColumnEntity {
     private String name;
     private Integer order;
     private BoardColumnKindEnum kind;
+    // Mapeamentos das entidades
     private BoardEntity board = new BoardEntity();
-    //private List<CardEntity> cardEntityList = new ArrayList<>();
+    @ToString.Exclude
+    private List<CardEntity> cardEntityList = new ArrayList<>();
 
 }

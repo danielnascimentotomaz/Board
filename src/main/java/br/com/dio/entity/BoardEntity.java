@@ -10,6 +10,8 @@ import java.util.List;
 public class BoardEntity {
     private Long id;
     private String name;
+
+    // Mapeamento
     @ToString.Exclude
     private List<BoardColumnEntity> boardColumns = new ArrayList<>();
 }
