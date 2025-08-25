@@ -1,41 +1,43 @@
-ago. 20, 2025 9:35:45 AM liquibase.changelog
+ago. 25, 2025 4:01:30 PM liquibase.changelog
 INFO: Reading resource: db/changelog/migrations/db.changelog-202508111045.sql
-ago. 20, 2025 9:35:45 AM liquibase.changelog
+ago. 25, 2025 4:01:30 PM liquibase.changelog
 INFO: Reading resource: db/changelog/migrations/db.changelog-202508120540.sql
-ago. 20, 2025 9:35:45 AM liquibase.changelog
+ago. 25, 2025 4:01:30 PM liquibase.changelog
 INFO: Reading resource: db/changelog/migrations/db.changelog-202508120617.sql
-ago. 20, 2025 9:35:45 AM liquibase.changelog
+ago. 25, 2025 4:01:30 PM liquibase.changelog
 INFO: Reading resource: db/changelog/migrations/db.changelog-202508120625.sql
-ago. 20, 2025 9:35:45 AM liquibase.changelog
+ago. 25, 2025 4:01:30 PM liquibase.changelog
 INFO: Reading resource: db/changelog/migrations/db.changelog-202508191050-alter-cards-description.sql
-ago. 20, 2025 9:35:48 AM liquibase.changelog
-INFO: Reading from railway.DATABASECHANGELOG
+ago. 25, 2025 4:01:30 PM liquibase.changelog
+INFO: Reading resource: db/changelog/migrations/db.changelog-202508230206-alter_block_unblock_reason_nullable.sql
+ago. 25, 2025 4:01:30 PM liquibase.changelog
+INFO: Reading from Board.databasechangelog
 Database is up to date, no changesets to execute
-ago. 20, 2025 9:35:49 AM liquibase.changelog
-INFO: Reading from railway.DATABASECHANGELOG
+ago. 25, 2025 4:01:30 PM liquibase.changelog
+INFO: Reading from Board.databasechangelog
 
 UPDATE SUMMARY
 Run:                          0
-Previously run:               5
+Previously run:               6
 Filtered out:                 0
 -------------------------------
-Total change sets:            5
+Total change sets:            6
 
-ago. 20, 2025 9:35:49 AM liquibase.util
+ago. 25, 2025 4:01:30 PM liquibase.util
 INFO: UPDATE SUMMARY
-ago. 20, 2025 9:35:49 AM liquibase.util
+ago. 25, 2025 4:01:30 PM liquibase.util
 INFO: Run:                          0
-ago. 20, 2025 9:35:49 AM liquibase.util
-INFO: Previously run:               5
-ago. 20, 2025 9:35:49 AM liquibase.util
+ago. 25, 2025 4:01:30 PM liquibase.util
+INFO: Previously run:               6
+ago. 25, 2025 4:01:30 PM liquibase.util
 INFO: Filtered out:                 0
-ago. 20, 2025 9:35:49 AM liquibase.util
+ago. 25, 2025 4:01:30 PM liquibase.util
 INFO: -------------------------------
-ago. 20, 2025 9:35:49 AM liquibase.util
-INFO: Total change sets:            5
-ago. 20, 2025 9:35:49 AM liquibase.util
+ago. 25, 2025 4:01:30 PM liquibase.util
+INFO: Total change sets:            6
+ago. 25, 2025 4:01:30 PM liquibase.util
 INFO: Update summary generated
-ago. 20, 2025 9:35:49 AM liquibase.lockservice
+ago. 25, 2025 4:01:31 PM liquibase.lockservice
 INFO: Successfully released change log lock
-ago. 20, 2025 9:35:49 AM liquibase.command
+ago. 25, 2025 4:01:31 PM liquibase.command
 INFO: Command execution complete

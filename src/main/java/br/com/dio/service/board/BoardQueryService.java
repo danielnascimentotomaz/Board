@@ -1,7 +1,7 @@
 package br.com.dio.service.board;
 
-import br.com.dio.dto.BoardColumnDTO;
-import br.com.dio.dto.BoardDetailsDTO;
+import br.com.dio.dto.boardcolumn.BoardColumnDTO;
+import br.com.dio.dto.board.BoardDetailsDTO;
 import br.com.dio.entity.BoardColumnEntity;
 import br.com.dio.entity.BoardEntity;
 import br.com.dio.persistence.config.ConnectionStrategy;

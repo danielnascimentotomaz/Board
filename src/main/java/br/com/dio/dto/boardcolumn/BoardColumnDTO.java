@@ -1,4 +1,4 @@
-package br.com.dio.dto;
+package br.com.dio.dto.boardcolumn;
 
 import br.com.dio.entity.BoardColumnEntity;
 import br.com.dio.entity.BoardColumnKindEnum;

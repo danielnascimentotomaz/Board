@@ -1,5 +1,6 @@
 package br.com.dio.persistence.dao.card;
 
+import br.com.dio.dto.card.CardDetailsDTO;
 import br.com.dio.entity.CardEntity;
 
 import java.sql.SQLException;
@@ -32,7 +33,8 @@ public interface CardDAO {
      * @return Card, se encontrado
      * @throws SQLException
      */
-    Optional<CardEntity> findById(Long cardId) throws SQLException;
+
+    Optional<CardDetailsDTO> findById(final Long cardId)throws SQLException;
 
     /**
      * Atualiza os dados completos de um card.

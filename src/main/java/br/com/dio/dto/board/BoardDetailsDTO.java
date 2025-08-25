@@ -1,4 +1,6 @@
-package br.com.dio.dto;
+package br.com.dio.dto.board;
+
+import br.com.dio.dto.boardcolumn.BoardColumnDTO;
 
 import java.util.List;
 

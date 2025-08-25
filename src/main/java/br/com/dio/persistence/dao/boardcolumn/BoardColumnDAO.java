@@ -1,6 +1,7 @@
 package br.com.dio.persistence.dao.boardcolumn;
 
-import br.com.dio.dto.BoardColumnDTO;
+import br.com.dio.dto.boardcolumn.BoardColumnDTO;
+import br.com.dio.dto.boardcolumn.BoardColumnDetailsDTO;
 import br.com.dio.entity.BoardColumnEntity;
 
 import java.sql.SQLException;
@@ -14,4 +15,16 @@ public interface BoardColumnDAO {
     List<BoardColumnEntity>findAllColumnsByBoardId(final  Long id) throws SQLException;
 
     List<BoardColumnDTO> findByBoardIdWithDetails(final Long  boardId)throws SQLException;
+
+    Optional<BoardColumnDetailsDTO> findById01(final Long id)throws SQLException;
+
+    public Optional<BoardColumnEntity> findById(Long id) throws SQLException;
+
+
+
+
+
+
+
+
 }

@@ -1,7 +1,9 @@
 package br.com.dio.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
@@ -9,6 +11,8 @@ import java.util.List;
 
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BoardColumnEntity {
     private Long id;
     private String name;
@@ -21,4 +25,10 @@ public class BoardColumnEntity {
     @EqualsAndHashCode.Exclude
     private List<CardEntity> cardEntityList = new ArrayList<>();
 
+
+    public BoardColumnEntity(long id, String name, BoardColumnKindEnum boardColumnKindEnum) {
+        this.setId(id);
+        this.setName(name);
+        this.setKind(boardColumnKindEnum);
+    }
 }
