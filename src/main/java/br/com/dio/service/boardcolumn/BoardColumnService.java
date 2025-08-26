@@ -8,5 +8,7 @@ public interface BoardColumnService {
 
     BoardColumnEntity insert(BoardColumnEntity entity)throws SQLException;
 
+    boolean exists(Long  id)throws SQLException;
+
 
 }

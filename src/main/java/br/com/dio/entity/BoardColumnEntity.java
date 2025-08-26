@@ -9,6 +9,8 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
+import static br.com.dio.entity.BoardColumnKindEnum.INITIAL;
+
 
 @Data
 @AllArgsConstructor
@@ -31,4 +33,6 @@ public class BoardColumnEntity {
         this.setName(name);
         this.setKind(boardColumnKindEnum);
     }
+
+
 }

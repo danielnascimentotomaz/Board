@@ -2,11 +2,14 @@ package br.com.dio.ui;
 
 import br.com.dio.dto.boardcolumn.BoardColumnDetailsDTO;
 import br.com.dio.entity.BoardColumnEntity;
+import br.com.dio.entity.BoardColumnKindEnum;
 import br.com.dio.entity.BoardEntity;
 import br.com.dio.entity.CardEntity;
 import br.com.dio.persistence.config.ConnectionStrategy;
 import br.com.dio.service.board.BoardQueryService;
 import br.com.dio.service.boardcolumn.BoardColumnQueryService;
+import br.com.dio.service.boardcolumn.BoardColumnService;
+import br.com.dio.service.boardcolumn.BoardColumnServiceImpl;
 import br.com.dio.service.card.CardQueryService;
 import br.com.dio.service.card.CardService;
 import br.com.dio.service.card.CardServiceImpl;
@@ -19,20 +22,25 @@ import java.util.Scanner;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static br.com.dio.entity.BoardColumnKindEnum.INITIAL;
+
 public class BoardMenu {
     Scanner scanner = new Scanner(System.in);
     private final BoardEntity boardEntity;
     private final ConnectionStrategy connectionStrategy;
+    private  BoardColumnService boardColumnService;
 
 
     public BoardMenu(BoardEntity boardEntity, ConnectionStrategy connectionStrategy) {
         this.boardEntity = boardEntity;
         this.connectionStrategy = connectionStrategy;
+        new BoardColumnServiceImpl(this.connectionStrategy);
+
     }
 
 
     public void execute() {
-        System.out.printf("Bem vindo ao Board %s, selecione a operação desejada",boardEntity.getId());
+        System.out.printf("Bem vindo ao Board %s, selecione a operação desejada\n",boardEntity.getId());
         boolean running = true;
         while (running) {
             System.out.println("\n=====================================");
@@ -95,26 +103,17 @@ public class BoardMenu {
         String description = scanner.nextLine();
         card.setDescription(description);
 
-        System.out.println("Informe Id BoardColumns");
-        Long IdBoardColumns = scanner.nextLong();
-        scanner.nextLine();
-
-        // 1. Verifica se a coluna existe dentro do board carregado
-        BoardColumnEntity coluna = boardEntity.getBoardColumns()
-                .stream()
-                .filter(c -> c.getId().equals(IdBoardColumns))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Coluna não encontrada no board."));
+        // Regra de negócio diz que card tem comecar na coluna inicial
+        var initialColumn = boardEntity.getInitialColumn();
 
 
-        // Atribuir a coluna já existente
-        card.setBoardColumn(coluna);
+        card.setBoardColumn(initialColumn);
 
 
         try {
-            CardService cardService = new CardServiceImpl(connectionStrategy);
+            CardService cardService = new CardServiceImpl(connectionStrategy,boardColumnService);
             cardService.insert(card);
-            System.out.println(card);
+            System.out.printf("Card criado %s - %s: %d%n", card.getTitle(), card.getDescription(), card.getId());
         } catch (SQLException e) {
             System.out.println("Erro ao criar o card" + e.getMessage());
             e.printStackTrace();

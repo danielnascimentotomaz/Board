@@ -26,7 +26,9 @@ public class CardDAOImpl implements CardDAO{
     public CardEntity insert(CardEntity entity) throws SQLException {
         String sql = "INSERT INTO CARDS (title,description,boards_columns_id) VALUES (?,?,?)";
 
-        try(PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try(
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+        ){
             ps.setString(1,entity.getTitle());
             ps.setString(2,entity.getDescription());
             ps.setLong(3,entity.getBoardColumn().getId());

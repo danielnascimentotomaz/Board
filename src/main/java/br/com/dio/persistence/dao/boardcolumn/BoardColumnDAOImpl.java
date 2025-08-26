@@ -172,6 +172,23 @@ public class BoardColumnDAOImpl implements BoardColumnDAO {
         }
     }
 
+    @Override
+    public boolean exists(Long id) throws SQLException {
+        String sql = "SELECT 1 FROM BOARDS_COLUMNS bc WHERE bc.id = ?";
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1,id);
+
+           try(ResultSet rs = ps.executeQuery()) {
+               // Se o ResultSet tiver pelo menos um registro, retorna true
+               return rs.next();
+
+           }
+
+        }
+
+
+    }
+
 
     // Fazendo findById Usando a DTO
     @Override

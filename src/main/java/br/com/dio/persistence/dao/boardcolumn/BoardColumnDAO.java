@@ -21,10 +21,5 @@ public interface BoardColumnDAO {
     public Optional<BoardColumnEntity> findById(Long id) throws SQLException;
 
 
-
-
-
-
-
-
+    boolean exists(Long id) throws SQLException;
 }

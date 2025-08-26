@@ -8,9 +8,12 @@ import br.com.dio.persistence.dao.boardcolumn.BoardColumnDAOImpl;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+
+
 public class BoardColumnServiceImpl implements  BoardColumnService{
 
     private final ConnectionStrategy connectionStrategy;
+
 
     public BoardColumnServiceImpl(ConnectionStrategy connectionStrategy) {
         this.connectionStrategy = connectionStrategy;
@@ -38,6 +41,22 @@ public class BoardColumnServiceImpl implements  BoardColumnService{
 
         }catch (SQLException e){
             throw new SQLException("Falha ao conectar ao banco", e);
+        }
+
+    }
+
+    @Override
+    public boolean exists(Long id) throws SQLException {
+        try(Connection connection = connectionStrategy.getConnection()) {
+            BoardColumnDAO boardColumnDAO = new BoardColumnDAOImpl(connection);
+            try {
+                return boardColumnDAO.exists(id);
+            }catch (RuntimeException e){
+                // Pode lançar uma exceção de negócio ou retornar false
+                throw new RuntimeException("Não foi possível verificar a coluna", e);
+            }
+
+
         }
 
     }

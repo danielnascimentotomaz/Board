@@ -13,10 +13,6 @@ import java.sql.SQLException;
 public class Main {
     private final static MySQLConnection mySQLConnection = MySQLConnection.getInstance();
 
-
-
-
-
     public static void main(String[] args) throws SQLException {
 
 
