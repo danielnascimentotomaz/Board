@@ -62,6 +62,8 @@ public interface CardDAO {
      * @return true se o movimento foi bem sucedido
      * @throws SQLException
      */
-    boolean moveToColumn(Long cardId, Long columnId) throws SQLException;
+    boolean moveToColumn(Long columnId,Long cardId) throws SQLException;
+
+
 
 }

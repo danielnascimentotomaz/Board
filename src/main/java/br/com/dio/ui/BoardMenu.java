@@ -1,6 +1,7 @@
 package br.com.dio.ui;
 
 import br.com.dio.dto.boardcolumn.BoardColumnDetailsDTO;
+import br.com.dio.dto.boardcolumn.BoardColumnInfoDTO;
 import br.com.dio.entity.BoardColumnEntity;
 import br.com.dio.entity.BoardColumnKindEnum;
 import br.com.dio.entity.BoardEntity;
@@ -95,7 +96,7 @@ public class BoardMenu {
 
     private void createCard() {
         CardEntity card =new CardEntity();
-        System.out.println("Informe o tilte do Card");
+        System.out.println("Informe o titulo do Card");
         String title = scanner.nextLine();
         card.setTitle(title);
 
@@ -122,7 +123,30 @@ public class BoardMenu {
 
     }
 
+    // Regra de negócio: O card  só pode ser movido pra proxima coluna
     private void moveCardToNextColumn() {
+        System.out.println("Informe o id Card que deseja mover para proxima coluna");
+        Long cardId = scanner.nextLong();
+        scanner.nextLine();
+        /*List<BoardColumnInfoDTO> boardColumnsInfo =  boardEntity.getBoardColumns().stream().
+                map(bc -> new BoardColumnInfoDTO(
+                        bc.getId(),
+                        bc.getOrder(),
+                        bc.getKind(),
+                        bc.getBoard().getId()
+
+                )).toList();*/
+
+        try {
+
+            //new CardServiceImpl(connectionStrategy,boardColumnService).moveToNextColumn(cardId,boardColumnsInfo);
+            new CardServiceImpl(connectionStrategy,boardColumnService).moveToNextColumn(cardId);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+
     }
 
     private void blockCard() {

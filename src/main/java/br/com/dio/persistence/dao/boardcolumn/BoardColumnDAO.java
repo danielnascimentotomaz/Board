@@ -2,6 +2,7 @@ package br.com.dio.persistence.dao.boardcolumn;
 
 import br.com.dio.dto.boardcolumn.BoardColumnDTO;
 import br.com.dio.dto.boardcolumn.BoardColumnDetailsDTO;
+import br.com.dio.dto.boardcolumn.BoardColumnInfoDTO;
 import br.com.dio.entity.BoardColumnEntity;
 
 import java.sql.SQLException;
@@ -22,4 +23,6 @@ public interface BoardColumnDAO {
 
 
     boolean exists(Long id) throws SQLException;
+
+    Optional<BoardColumnInfoDTO> findInfoById(Long id) throws SQLException;
 }

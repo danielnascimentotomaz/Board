@@ -2,6 +2,7 @@ package br.com.dio.persistence.dao.boardcolumn;
 
 import br.com.dio.dto.boardcolumn.BoardColumnDTO;
 import br.com.dio.dto.boardcolumn.BoardColumnDetailsDTO;
+import br.com.dio.dto.boardcolumn.BoardColumnInfoDTO;
 import br.com.dio.dto.card.CardDTO;
 import br.com.dio.entity.BoardColumnEntity;
 import br.com.dio.entity.BoardColumnKindEnum;
@@ -187,6 +188,33 @@ public class BoardColumnDAOImpl implements BoardColumnDAO {
         }
 
 
+    }
+
+    @Override
+    public Optional<BoardColumnInfoDTO> findInfoById(Long id) throws SQLException {
+        String sql = """
+            SELECT bc.id, bc.`order`, bc.kind, bc.boards_id
+            FROM BOARDS_COLUMNS bc
+            WHERE bc.id = ?;
+            """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    BoardColumnInfoDTO dto = new BoardColumnInfoDTO(
+                            rs.getLong("id"),
+                            rs.getInt("order"),
+                            findByName(rs.getString("kind")),
+                            rs.getLong("boards_id") // agora busca o boardId
+                    );
+                    return Optional.of(dto);
+                }
+            }
+        }
+
+        return Optional.empty();
     }
 
 

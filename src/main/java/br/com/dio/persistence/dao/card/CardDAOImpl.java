@@ -69,7 +69,8 @@ public class CardDAOImpl implements CardDAO{
                                 WHERE sub_b.card_id = c.id
                             ) AS blocks_amount,
                             c.boards_columns_id,
-                            bc.name AS name_column_board
+                            bc.name AS name_column_board,
+                            bc.boards_id AS board_id   
                         FROM CARDS c
                         LEFT JOIN BLOCKS b
                                ON c.id = b.card_id
@@ -96,7 +97,9 @@ public class CardDAOImpl implements CardDAO{
                            rs.getString("block_reason"),
                            rs.getInt("blocks_amount"),
                            rs.getLong("boards_columns_id"),
-                           rs.getString("name_column_board"));
+                           rs.getString("name_column_board"),
+                           rs.getLong("board_id")
+                   );
                    return Optional.of(cardDetailsDTO);
                }
            }
@@ -117,7 +120,20 @@ public class CardDAOImpl implements CardDAO{
     }
 
     @Override
-    public boolean moveToColumn(Long cardId, Long columnId) throws SQLException {
-        return false;
+    public boolean moveToColumn(Long columnId,Long cardId) throws SQLException {
+        String sql = """
+                     UPDATE CARDS
+                     SET boards_columns_id= ?
+                     WHERE id= ?;
+                     """;
+
+
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, columnId);
+            ps.setLong(2, cardId);
+
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0; // true se pelo menos 1 linha foi atualizada
+        }
     }
 }
