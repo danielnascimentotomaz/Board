@@ -146,8 +146,8 @@ public class BoardDAOImpl implements BoardDAO {
     @Override
     public boolean exists(Long id) throws SQLException {
         String sql = "SELECT 1 FROM BOARDS WHERE id = ?";
-        try (
-                PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql))
+        {
             statement.setLong(1, id);
             ResultSet rs = statement.executeQuery();
             return rs.next();

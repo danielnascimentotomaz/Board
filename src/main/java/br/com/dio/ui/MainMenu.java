@@ -142,7 +142,13 @@ public class MainMenu  {
             Optional<BoardEntity> optional = boardQueryService.findById(id);
 
             optional.ifPresentOrElse(
-                  b  -> new BoardMenu(b,connectionStrategy).execute(),
+                  b  -> {
+                      try {
+                          new BoardMenu(b,connectionStrategy).execute();
+                      } catch (SQLException e) {
+                          throw new RuntimeException(e);
+                      }
+                  },
                     () -> System.out.printf("Nao foi encontrado um board com id %s\n", id)
 
             );

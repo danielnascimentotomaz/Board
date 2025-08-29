@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface BoardColumnService {
 
-    BoardColumnEntity insert(BoardColumnEntity entity)throws SQLException;
+    BoardColumnEntity insert(BoardColumnEntity entity);
 
-    boolean exists(Long  id)throws SQLException;
+    boolean exists(Long  id);
 
-    Optional<BoardColumnInfoDTO> findInfoById(Long id) throws SQLException;
+    Optional<BoardColumnInfoDTO> findInfoById(Long id);
 
-    public List<BoardColumnEntity> findAllColumnsByBoardId(Long boardId) throws SQLException;
+    public List<BoardColumnEntity> findAllColumnsByBoardId(Long boardId);
 
 
 

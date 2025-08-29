@@ -7,6 +7,13 @@ import br.com.dio.entity.BoardColumnKindEnum;
 import br.com.dio.entity.BoardEntity;
 import br.com.dio.entity.CardEntity;
 import br.com.dio.persistence.config.ConnectionStrategy;
+import br.com.dio.persistence.dao.block.BlockDAOImpl;
+import br.com.dio.persistence.dao.board.BoardDAO;
+import br.com.dio.persistence.dao.board.BoardDAOImpl;
+import br.com.dio.persistence.dao.card.CardDAO;
+import br.com.dio.persistence.dao.card.CardDAOImpl;
+import br.com.dio.service.block.BlockService;
+import br.com.dio.service.block.BlockServiceImpl;
 import br.com.dio.service.board.BoardQueryService;
 import br.com.dio.service.boardcolumn.BoardColumnQueryService;
 import br.com.dio.service.boardcolumn.BoardColumnService;
@@ -29,13 +36,20 @@ public class BoardMenu {
     Scanner scanner = new Scanner(System.in);
     private final BoardEntity boardEntity;
     private final ConnectionStrategy connectionStrategy;
-    private  BoardColumnService boardColumnService;
+    private final BoardColumnService boardColumnService;
+    private final BlockService blockService;
+    private final CardDAO cardDAO;
 
 
-    public BoardMenu(BoardEntity boardEntity, ConnectionStrategy connectionStrategy) {
+    public BoardMenu(BoardEntity boardEntity, ConnectionStrategy connectionStrategy) throws SQLException {
         this.boardEntity = boardEntity;
         this.connectionStrategy = connectionStrategy;
-        new BoardColumnServiceImpl(this.connectionStrategy);
+        this.cardDAO = new CardDAOImpl(connectionStrategy.getConnection());
+
+        this.blockService = new BlockServiceImpl(connectionStrategy,new BlockDAOImpl(connectionStrategy.getConnection()));
+
+        this.boardColumnService = new BoardColumnServiceImpl(this.connectionStrategy);
+
 
     }
 
@@ -112,7 +126,7 @@ public class BoardMenu {
 
 
         try {
-            CardService cardService = new CardServiceImpl(connectionStrategy,boardColumnService);
+            CardService cardService = new CardServiceImpl(connectionStrategy,boardColumnService,cardDAO,blockService);
             cardService.insert(card);
             System.out.printf("Card criado %s - %s: %d%n", card.getTitle(), card.getDescription(), card.getId());
         } catch (SQLException e) {
@@ -140,7 +154,7 @@ public class BoardMenu {
         try {
 
             //new CardServiceImpl(connectionStrategy,boardColumnService).moveToNextColumn(cardId,boardColumnsInfo);
-            new CardServiceImpl(connectionStrategy,boardColumnService).moveToNextColumn(cardId);
+            new CardServiceImpl(connectionStrategy,boardColumnService,cardDAO,blockService).moveToNextColumn(cardId);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -150,12 +164,33 @@ public class BoardMenu {
     }
 
     private void blockCard() {
+        System.out.println("Informe o id do card que sera bloqueado:");
+        var cardId = scanner.nextLong();
+        scanner.nextLine();
+        System.out.println("Informe o motivo do bloqueio do card");
+        var reason = scanner.nextLine();
+        try {
+            CardService cardService = new CardServiceImpl(connectionStrategy,boardColumnService,cardDAO,blockService);
+            cardService.block(cardId,reason);
+        } catch (Exception e) {
+           System.out.println(e);
+        }
     }
 
     private void UnblockCard() {
     }
 
     private void cancelCard() {
+        System.out.println("Informe o id Card que deseja Cancelar");
+        Long cardId = scanner.nextLong();
+        scanner.nextLine();
+        try {
+            CardService cardService = new CardServiceImpl(connectionStrategy,boardColumnService,cardDAO,blockService);
+            cardService.cancelCard(cardId);
+        } catch (Exception e) {
+           System.out.println(e);
+        }
+
     }
 
     private void showBoard() {
@@ -196,37 +231,24 @@ public class BoardMenu {
             scanner.nextLine();
         }
 
-        try {
-            BoardColumnQueryService boardColumnQueryService = new BoardColumnQueryService(connectionStrategy);
+        BoardColumnQueryService boardColumnQueryService = new BoardColumnQueryService(connectionStrategy);
 
-            Optional<BoardColumnDetailsDTO> column = boardColumnQueryService.findBYId(selectecdColumn);
-
-
-            column.ifPresent(columns -> {
-                System.out.printf("Nome da Coluna: %s Tipo: %s\n\n", columns.name(), columns.kind());
-
-                columns.cards().forEach(card -> System.out.printf(
-                        "Card %s - %s\nDescricao: %s\n\n",
-                        card.id(),
-                        card.title(),
-                        card.description()
-                ));
-            }
+        Optional<BoardColumnDetailsDTO> column = boardColumnQueryService.findBYId(selectecdColumn);
 
 
-            );
+        column.ifPresent(columns -> {
+            System.out.printf("Nome da Coluna: %s Tipo: %s\n\n", columns.name(), columns.kind());
 
-
-
-
-
-
-
-
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            columns.cards().forEach(card -> System.out.printf(
+                    "Card %s - %s\nDescricao: %s\n\n",
+                    card.id(),
+                    card.title(),
+                    card.description()
+            ));
         }
+
+
+        );
 
 
     }

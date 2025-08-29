@@ -2,9 +2,13 @@ package br.com.dio.service.boardcolumn;
 
 import br.com.dio.dto.boardcolumn.BoardColumnInfoDTO;
 import br.com.dio.entity.BoardColumnEntity;
+import br.com.dio.exception.BoardColumnAccessException;
+import br.com.dio.exception.BoardColumnNotFoundException;
 import br.com.dio.persistence.config.ConnectionStrategy;
 import br.com.dio.persistence.dao.boardcolumn.BoardColumnDAO;
 import br.com.dio.persistence.dao.boardcolumn.BoardColumnDAOImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,6 +18,10 @@ import java.util.Optional;
 
 public class BoardColumnServiceImpl implements  BoardColumnService{
 
+    // Cria o logger da classe
+    private static final Logger log = LoggerFactory.getLogger(BoardColumnServiceImpl.class);
+
+
     private final ConnectionStrategy connectionStrategy;
 
 
@@ -21,81 +29,93 @@ public class BoardColumnServiceImpl implements  BoardColumnService{
         this.connectionStrategy = connectionStrategy;
     }
 
-
     @Override
-    public BoardColumnEntity insert(BoardColumnEntity entity)throws SQLException {
-        try(
-                Connection connection = connectionStrategy.getConnection();
-                ) {
+    public BoardColumnEntity insert(BoardColumnEntity entity) {
+        try (Connection connection = connectionStrategy.getConnection()) {
             connection.setAutoCommit(false);
 
+            // ⚠️ ATENÇÃO: Criar um DAO a cada metodo nao e uma boa prática.
+            // ✅ Melhor prática: criar o DAO no construtor da classe e reutilizar.
+            // 🔹 Aqui estamos instanciando no metodo apenas como exemplo didático.
             BoardColumnDAO boardColumnDAO = new BoardColumnDAOImpl(connection);
 
             try {
-                boardColumnDAO.insert(entity);
+                BoardColumnEntity saved = boardColumnDAO.insert(entity);
                 connection.commit();
-                return entity;
-            }catch (SQLException e){
+                log.info("BoardColumn inserida com sucesso: name={}", entity.getName());
+                return saved;
+
+            } catch (SQLException e) {
                 connection.rollback();
-                throw new SQLException("Erro ao tentar Inserir o board column " , e);
+                var menssage = "Falha ao acessar o banco para inserir BoardColumn: name= ";
 
+                log.error(menssage+ entity.getName(), e);
+
+                throw new BoardColumnAccessException(menssage+ entity.getName(), e);
             }
 
-        }catch (SQLException e){
-            throw new SQLException("Falha ao conectar ao banco", e);
-        }
+        } catch (SQLException e) {
+            var menssage = "Falha ao acessar o banco para inserir BoardColumn: name=";
 
+            log.error(menssage+ entity.getName(), e);
+
+            throw new BoardColumnAccessException(menssage+ entity.getName(), e);
+        }
     }
 
     @Override
-    public boolean exists(Long id) throws SQLException {
-        try(Connection connection = connectionStrategy.getConnection()) {
-            BoardColumnDAO boardColumnDAO = new BoardColumnDAOImpl(connection);
-            try {
-                return boardColumnDAO.exists(id);
-            }catch (RuntimeException e){
-                // Pode lançar uma exceção de negócio ou retornar false
-                throw new RuntimeException("Não foi possível verificar a coluna", e);
-            }
-
-
-        }
-
-    }
-
-    @Override
-    public Optional<BoardColumnInfoDTO> findInfoById(Long id) throws SQLException {
+    public boolean exists(Long id) {
         try (Connection connection = connectionStrategy.getConnection()) {
             BoardColumnDAO boardColumnDAO = new BoardColumnDAOImpl(connection);
-            try {
-                return boardColumnDAO.findInfoById(id);
-            } catch (SQLException e) {
-                // Mantém a causa original
-                throw new SQLException("Erro ao buscar BoardColumnInfoDTO com id " + id, e);
-            }
+            return boardColumnDAO.exists(id);
+
         } catch (SQLException e) {
-            throw new SQLException("Falha ao conectar ao banco", e);
+            var menssage = "Falha ao acessar o banco para verificar existência da coluna: id=";
+
+            log.error(menssage+ id, e);
+
+            throw new BoardColumnAccessException(menssage+ id, e);
         }
     }
 
     @Override
-    public List<BoardColumnEntity> findAllColumnsByBoardId(Long boardId) throws SQLException {
-        try(Connection connection = connectionStrategy.getConnection()) {
+    public Optional<BoardColumnInfoDTO> findInfoById(Long id) {
+        try (Connection connection = connectionStrategy.getConnection()) {
             BoardColumnDAO boardColumnDAO = new BoardColumnDAOImpl(connection);
-            try {
-                return boardColumnDAO.findAllColumnsByBoardId(boardId);
-            }catch (SQLException e){
-                throw new SQLException("Erro ao buscar BoardColumnEntity com boarId " + boardId, e);
+
+            Optional<BoardColumnInfoDTO> column = boardColumnDAO.findInfoById(id);
+
+            if (column.isEmpty()) {
+                var message = "Coluna não encontrada: id= ";
+
+                log.warn(message + id);
+
+                throw new BoardColumnNotFoundException(message + id);
             }
+            return column;
 
-        }catch (SQLException e) {
-            throw new SQLException("Falha ao conectar ao banco", e);
+        } catch (SQLException e) {
+            var menssage = "Falha ao acessar o banco para buscar coluna: id=";
+
+            log.error(menssage+ id, e);
+
+            throw new BoardColumnAccessException(menssage+ id, e);
         }
-
-
     }
 
+    @Override
+    public List<BoardColumnEntity> findAllColumnsByBoardId(Long boardId) {
+        try (Connection connection = connectionStrategy.getConnection()) {
+            BoardColumnDAO boardColumnDAO = new BoardColumnDAOImpl(connection);
+            return boardColumnDAO.findAllColumnsByBoardId(boardId);
 
+        } catch (SQLException e) {
+            var menssage = "Falha ao acessar o banco para buscar colunas do board: boardId = ";
 
+            log.error(menssage + boardId, e);
+
+            throw new BoardColumnAccessException(menssage + boardId, e);
+        }
+    }
 
 }
