@@ -17,9 +17,12 @@ public interface CardService {
     CardDetailsDTO findById(long cardId) throws SQLException;
     boolean exists(Long  id)throws SQLException;
 
-    //void moveToNextColumn(final long cardId, final List<BoardColumnInfoDTO> boardColumnInfoDTOS) throws Exception;
     void moveToNextColumn(long cardId) throws Exception;
     void cancelCard(long cardId) throws Exception;
-    boolean block(final long id,final String reason)throws Exception;
+    boolean block(final long cardId,final String reason)throws Exception;
+    boolean unblock(final long cardId,final String reason);
+
+
+
 
 }

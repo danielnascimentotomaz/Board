@@ -178,7 +178,22 @@ public class BoardMenu {
     }
 
     private void UnblockCard() {
+        System.out.println("Informe o id do card que sera desbloqueado:");
+        var cardId = scanner.nextLong();
+        scanner.nextLine();
+        System.out.println("Informe o motivo do desbloqueio do card");
+        var reason = scanner.nextLine();
+
+        try {
+            CardService cardService = new CardServiceImpl(connectionStrategy,boardColumnService,cardDAO,blockService);
+            cardService.unblock(cardId,reason);
+
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
+
+
 
     private void cancelCard() {
         System.out.println("Informe o id Card que deseja Cancelar");

@@ -4,5 +4,6 @@ package br.com.dio.service.block;
 
 public interface BlockService {
 
-    public boolean block(Long cardId, String reason);
+     boolean block(Long cardId, String reason);
+     boolean unblock(final String reason, final Long cardId);
 }

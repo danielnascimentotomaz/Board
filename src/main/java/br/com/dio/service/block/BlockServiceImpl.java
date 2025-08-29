@@ -2,6 +2,7 @@ package br.com.dio.service.block;
 
 import br.com.dio.exception.BlockPersistenceException;
 import br.com.dio.exception.CardBlockedException;
+import br.com.dio.exception.CardUnblockedException;
 import br.com.dio.persistence.config.ConnectionStrategy;
 import br.com.dio.persistence.dao.block.BlockDAO;
 import br.com.dio.persistence.dao.card.CardDAO;
@@ -54,5 +55,40 @@ public class BlockServiceImpl implements BlockService {
             log.error(message, e);
             throw new BlockPersistenceException(message, e);
         }
+    }
+
+    @Override
+    public boolean unblock(String reason, Long cardId){
+        try(Connection connection = connectionStrategy.getConnection()) {
+            connection.setAutoCommit(false);
+
+            try {
+                boolean unblock = blockDAO.unblock(reason, cardId);
+
+                connection.commit();
+
+                log.info("Card desbloqueado com sucesso: IDCard={}", cardId);
+
+                return  unblock;
+
+
+            } catch (SQLException e) {
+                connection.rollback();
+                var message = "Erro ao tentar desbloquear o card id = ".formatted(cardId);
+
+                log.error(message, e);
+
+                throw new CardUnblockedException(message,e);
+            }
+
+
+        } catch (SQLException e) {
+            String message = "Falha ao obter conexao com o banco de dados. Verifique a configuracao de conexão.";
+            log.error(message, e);
+            throw new BlockPersistenceException(message, e);
+        }
+
+
+
     }
 }

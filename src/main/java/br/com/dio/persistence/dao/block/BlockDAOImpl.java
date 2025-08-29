@@ -27,6 +27,8 @@ public class BlockDAOImpl implements BlockDAO {
         this.connection = connection;
     }
 
+
+
     @Override
     public boolean block(Long cardId, String reason) throws SQLException {
         String sql = "INSERT INTO BLOCKS (card_id, blocked_at, block_reason) VALUES (?, ?, ?)";
@@ -39,6 +41,32 @@ public class BlockDAOImpl implements BlockDAO {
             int rows = ps.executeUpdate();
             return rows > 0;
         }
+    }
+
+    @Override
+    public boolean unblock(final String reason,final Long cardId) throws SQLException {
+        String sql = """
+                        UPDATE BLOCKS
+                        SET
+                            unblocked_at = ?,
+                            unblock_reason = ?
+                        WHERE card_id = ?
+                          AND unblock_reason IS NULL
+                       """;
+
+
+        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setTimestamp(1,toTimestamp(OffsetDateTime.now()));
+            ps.setString(2,reason);
+            ps.setLong(3,cardId);
+
+
+            int row = ps.executeUpdate();
+            return row > 0;
+
+        }
+
     }
 
 

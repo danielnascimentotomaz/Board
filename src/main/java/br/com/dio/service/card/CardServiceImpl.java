@@ -9,6 +9,7 @@ import br.com.dio.exception.CardCancelledException;
 import br.com.dio.exception.CardFinishedException;
 import br.com.dio.exception.CardNotFoundException;
 import br.com.dio.exception.CardPersistenceException;
+import br.com.dio.exception.CardUnblockedException;
 import br.com.dio.exception.EntityNotFoundException;
 import br.com.dio.persistence.config.ConnectionStrategy;
 import br.com.dio.persistence.dao.card.CardDAO;
@@ -157,15 +158,34 @@ public class CardServiceImpl implements CardService {
                 connection.commit();
                 return blocked;
 
-            } catch (CardBlockedException | CardCancelledException | CardFinishedException e) {
-                connection.rollback();
-                throw e; // relança exceções de negócio
             } catch (SQLException e) {
                 connection.rollback();
                 throw new SQLException("Falha ao acessar o banco ao bloquear card com id: " + cardId, e);
             }
-
         }
+    }
+
+    @Override
+    public boolean unblock(long cardId, String reason) {
+        try{
+            // Buscar Card
+            CardDetailsDTO cardDetailsDTO = findById(cardId);
+
+            if (!cardDetailsDTO.blocked()){
+                var message = "O card com " + cardId +" não está bloqueado e não pode ser desbloqueado.";
+                log.info(message);
+                throw  new CardUnblockedException(message);
+            }
+
+            // Desbloquear Car
+            boolean unblock = blockService.unblock(reason,cardId);
+            return unblock;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
 }
